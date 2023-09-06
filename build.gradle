@@ -1,0 +1,51 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version "$springBootVersion"
+	id 'io.spring.dependency-management' version "$springDependencyManagementVersion"
+}
+
+group = 'com.geopokrovskiy'
+version = '1.0.0'
+
+java {
+	sourceCompatibility = '17'
+}
+
+repositories {
+	mavenCentral()
+	maven { url 'https://repo.spring.io/milestone' }
+	maven { url 'https://repo.spring.io/snapshot' }
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.session:spring-session-core'
+	implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+
+	implementation "io.asyncer:r2dbc-mysql:$r2dbcVersion"
+	implementation "mysql:mysql-connector-java:$mySqlVersion"
+
+	implementation "org.flywaydb:flyway-mysql:$flywayDbVersion"
+	implementation "com.google.code.findbugs:jsr305:$googleFindBugsVersion"
+
+	implementation "org.mapstruct:mapstruct:$mapStructVersion"
+
+	implementation "io.jsonwebtoken:jjwt:$jsonWebTokenVersion"
+	implementation "javax.xml.bind:jaxb-api:$jaxbApiVersion"
+
+	implementation group: 'com.amazonaws', name: 'aws-java-sdk', version: "$awsJavaSdkVersion"
+	implementation 'org.projectlombok:lombok:1.18.22'
+
+	annotationProcessor "org.projectlombok:lombok"
+	annotationProcessor "org.mapstruct:mapstruct-processor:$mapStructVersion"
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'io.projectreactor:reactor-test'
+
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

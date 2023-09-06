@@ -1,0 +1,15 @@
+-- This is a migration file for user table creation
+
+CREATE TABLE IF NOT EXISTS users(
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    username VARCHAR(64) NOT NULL UNIQUE,
+    first_name VARCHAR(64),
+    last_name VARCHAR(64),
+    password VARCHAR(64) NOT NULL,
+    role VARCHAR(32) NOT NULL,
+    status ENUM('ACTIVE', 'DELETED') NOT NULL,
+    enabled BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
