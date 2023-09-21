@@ -22,10 +22,17 @@ public class AuthRestControllerV1 {
     private final UserMapper userMapper;
 
 
-    @PostMapping("/register")
+    @PostMapping("/register_user")
     public Mono<UserDto> register(@RequestBody UserDto dto) {
         UserEntity entity = userMapper.map(dto);
         return userService.registerUser(entity)
+                .map(userMapper::map);
+    }
+
+    @PostMapping("/register_admin")
+    public Mono<UserDto> registerAdmin(@RequestBody UserDto dto) {
+        UserEntity entity = userMapper.map(dto);
+        return userService.registerAdmin(entity)
                 .map(userMapper::map);
     }
 

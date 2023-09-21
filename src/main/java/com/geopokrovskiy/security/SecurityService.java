@@ -17,8 +17,8 @@ import java.util.*;
 @RequiredArgsConstructor
 public class SecurityService {
 
-    private UserService userService;
-    private PasswordEncoder passwordEncoder;
+    private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
     @Value("${jwt.secret}")
     private String secret;
     @Value("${jwt.expiration}")
@@ -36,7 +36,7 @@ public class SecurityService {
     }
 
     private TokenDetails generateToken(Map<String, Object> claims, String subject) {
-        Long expirationTimeInMillis = expirationInSeconds * 1000L;
+        long expirationTimeInMillis = expirationInSeconds * 1000L;
         Date expirationDate = new Date(new Date().getTime() + expirationTimeInMillis);
 
         return generateToken(expirationDate, claims, subject);

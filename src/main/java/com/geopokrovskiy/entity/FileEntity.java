@@ -1,10 +1,9 @@
 package com.geopokrovskiy.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.util.List;
@@ -17,8 +16,12 @@ import java.util.List;
 public class FileEntity {
     @Id
     private Integer id;
+    @Column("location")
     private String location;
+    @Column("status")
     private Status status;
+    @Transient
+    @ToString.Exclude
     private List<EventEntity> events;
 
 }

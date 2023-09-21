@@ -26,8 +26,9 @@ public class WebSecurityConfig {
     @Value("${jwt.secret}")
     private String secret;
 
-    private final String[] publicRoutes = {"/api/v1/auth/register", "/api/v1/auth/login"};
+    private final String[] publicRoutes = {"/api/v1/auth/register_user", "/api/v1/auth/register_admin",  "/api/v1/auth/login"};
 
+    @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http, AuthenticationManager authenticationManager) {
         return http
                 .csrf().disable()

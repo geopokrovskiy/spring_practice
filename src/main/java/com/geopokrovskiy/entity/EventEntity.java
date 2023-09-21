@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -16,10 +17,12 @@ import org.springframework.data.relational.core.mapping.Table;
 public class EventEntity {
     @Id
     private Integer id;
-    @Column("user_id")
+    @Transient
     private UserEntity userEntity;
-    @Column("file_id")
+    @Transient
     private FileEntity fileEntity;
+    @Column("status")
     private Status status;
+    @Column("event")
     private EventString eventString;
 }
