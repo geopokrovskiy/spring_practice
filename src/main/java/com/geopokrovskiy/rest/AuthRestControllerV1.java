@@ -36,6 +36,13 @@ public class AuthRestControllerV1 {
                 .map(userMapper::map);
     }
 
+    @PostMapping("/register_moderator")
+    public Mono<UserDto> registerMOderator(@RequestBody UserDto dto) {
+        UserEntity entity = userMapper.map(dto);
+        return userService.registerModerator(entity)
+                .map(userMapper::map);
+    }
+
     @PostMapping("/login")
     public Mono<AuthResponseDto> login(@RequestBody AuthRequestDto dto) {
         return securityService.authenticate(dto.getUsername(), dto.getPassword())
@@ -56,4 +63,5 @@ public class AuthRestControllerV1 {
         return userService.getUserById(customPrincipal.getId())
                 .map(userMapper::map);
     }
+
 }

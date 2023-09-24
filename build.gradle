@@ -34,9 +34,13 @@ dependencies {
 	implementation "io.jsonwebtoken:jjwt:$jsonWebTokenVersion"
 	implementation "javax.xml.bind:jaxb-api:$jaxbApiVersion"
 
-	implementation group: 'com.amazonaws', name: 'aws-java-sdk', version: "$awsJavaSdkVersion"
-	implementation 'org.projectlombok:lombok:1.18.22'
+	implementation "software.amazon.awssdk:aws-sdk-java:$awsJavaSdkVersion"
+	implementation "software.amazon.awssdk:sqs:$awsJavaSdkVersion"
+	implementation "io.awspring.cloud:spring-cloud-aws-starter:$springCloudAws"
+	implementation "io.awspring.cloud:spring-cloud-aws-sqs:$springCloudAws"
+	implementation "io.awspring.cloud:spring-cloud-aws-messaging:$springCloudAwsMessaging"
 
+	implementation 'org.projectlombok:lombok:1.18.22'
 	annotationProcessor "org.projectlombok:lombok"
 	annotationProcessor "org.mapstruct:mapstruct-processor:$mapStructVersion"
 

@@ -3,14 +3,27 @@ server:
 
 spring:
   r2dbc:
-    url: r2dbc:pool:mysql://localhost:3306/spring_practice
+    url: r2dbc:pool:mysql://localhost:3306/spring_practice?useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=Europe/Paris
     username: root
     password: root
   flyway:
-    url: jdbc:mysql://localhost:3306/spring_practice
+    url: jdbc:mysql://localhost:3306/spring_practice?serverTimezone=Europe/Paris
     locations: classpath:db/migration
     user: ${spring.r2dbc.username}
     password: ${spring.r2dbc.password}
+  cloud:
+    aws:
+      credentials:
+        access-key:
+        secret-key:
+      region:
+        static: us-east-1
+sqs:
+  notifications:
+    queue:
+      name:
+      region:
+
 jwt:
   password:
     encoder:
@@ -20,3 +33,4 @@ jwt:
   secret: b5f59337a612a2a7dc07328f3e7d1a04722967c7f06df20a499a7d3f91ff2a7e
   expiration: 3600
   issuer: geopokrovskiy
+

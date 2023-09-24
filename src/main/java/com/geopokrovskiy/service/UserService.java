@@ -12,7 +12,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -51,6 +50,21 @@ public class UserService {
         });
     }
 
+    public Mono<UserEntity> registerModerator(UserEntity user) {
+        return userRepository.save(
+                user.toBuilder()
+                        .password(passwordEncoder.encode(user.getPassword()))
+                        .role(UserRole.MODERATOR)
+                        .enabled(true)
+                        .status(Status.ACTIVE)
+                        .createdAt(LocalDateTime.now())
+                        .updatedAt(LocalDateTime.now())
+                        .build()
+        ).doOnSuccess(u -> {
+            log.info("IN registerModerator - user : {} created", u);
+        });
+    }
+
     public Mono<UserEntity> getUserById(Integer id) {
         return userRepository.findById(id);
     }
@@ -59,7 +73,60 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
-    public Flux<UserEntity> getAllUsers(){
+    public Flux<UserEntity> getAllUsers() {
+        log.info("All users has been received by an admin!");
         return userRepository.findAll();
+    }
+
+    public Mono<UserEntity> deleteUser(UserEntity user) {
+        return userRepository.save(
+                        user.toBuilder()
+                                .status(Status.DELETED)
+                                .enabled(false)
+                                .updatedAt(LocalDateTime.now())
+                                .build())
+                .doOnSuccess(u -> {
+                    log.info("User : {} has been deleted", u);
+                });
+    }
+
+    public Mono<UserEntity> banUser(UserEntity user) {
+        return userRepository.save(
+                        user.toBuilder()
+                                .enabled(false)
+                                .updatedAt(LocalDateTime.now())
+                                .build())
+                .doOnSuccess(u -> {
+                    log.info("User : {} has been banned!", u);
+                });
+    }
+
+    public Mono<UserEntity> unbanUser(UserEntity user) {
+        return userRepository.save(
+                        user.toBuilder()
+                                .enabled(true)
+                                .updatedAt(LocalDateTime.now())
+                                .build())
+                .doOnSuccess(u -> {
+                    log.info("User : {} has been unbanned!", u);
+                });
+    }
+
+    public Mono<UserEntity> updateUser(UserEntity user) {
+        return userRepository.findById(user.getId())
+                .flatMap(existingUser -> {
+                    existingUser.setUsername(user.getUsername());
+                    existingUser.setFirstName(user.getFirstName());
+                    existingUser.setLastName(user.getLastName());
+                    existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
+                    existingUser.setRole(user.getRole());
+                    existingUser.setEnabled(true);
+                    existingUser.setStatus(Status.ACTIVE);
+                    existingUser.setUpdatedAt(LocalDateTime.now());
+                    return userRepository.save(existingUser);
+                })
+                .doOnSuccess(updatedUser -> {
+                    log.info("User: {} has been updated!", updatedUser);
+                });
     }
 }
