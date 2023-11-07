@@ -15,12 +15,11 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class EventService {
     private final EventRepository eventRepository;
-
     public Mono<EventEntity> addEvent(FileEntity fileEntity, UserEntity userEntity, EventString eventString){
         EventEntity eventEntity = new EventEntity()
                 .toBuilder()
-                .fileEntity(fileEntity)
-                .userEntity(userEntity)
+                .fileId(fileEntity.getId())
+                .userId(userEntity.getId())
                 .eventString(eventString)
                 .build();
         return eventRepository.save(eventEntity);

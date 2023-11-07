@@ -37,7 +37,7 @@ public class AuthRestControllerV1 {
     }
 
     @PostMapping("/register_moderator")
-    public Mono<UserDto> registerMOderator(@RequestBody UserDto dto) {
+    public Mono<UserDto> registerModerator(@RequestBody UserDto dto) {
         UserEntity entity = userMapper.map(dto);
         return userService.registerModerator(entity)
                 .map(userMapper::map);

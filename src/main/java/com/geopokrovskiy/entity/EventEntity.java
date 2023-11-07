@@ -17,6 +17,10 @@ import org.springframework.data.relational.core.mapping.Table;
 public class EventEntity {
     @Id
     private Integer id;
+    @Column("user_id")
+    private Integer userId;
+    @Column("file_id")
+    private Integer fileId;
     @Transient
     private UserEntity userEntity;
     @Transient

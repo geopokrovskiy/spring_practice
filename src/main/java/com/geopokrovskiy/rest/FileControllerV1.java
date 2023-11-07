@@ -3,18 +3,17 @@ package com.geopokrovskiy.rest;
 import com.geopokrovskiy.dto.EventDto;
 import com.geopokrovskiy.dto.FileDto;
 import com.geopokrovskiy.entity.FileEntity;
-import com.geopokrovskiy.entity.UserEntity;
 import com.geopokrovskiy.mapper.EventMapper;
 import com.geopokrovskiy.mapper.FileMapper;
-import com.geopokrovskiy.mapper.UserMapper;
 import com.geopokrovskiy.security.CustomPrincipal;
-import com.geopokrovskiy.security.SecurityService;
-import com.geopokrovskiy.service.EventService;
 import com.geopokrovskiy.service.FileService;
 import com.geopokrovskiy.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -27,7 +26,7 @@ public class FileControllerV1 {
     private final EventMapper eventMapper;
 
     @PostMapping("/upload")
-    public Mono<EventDto> uploadFile1(Authentication authentication, @RequestBody FileDto fileDto){
+    public Mono<EventDto> uploadFile1(Authentication authentication, @RequestBody FileDto fileDto) {
         CustomPrincipal customPrincipal = (CustomPrincipal) authentication.getPrincipal();
         String username = customPrincipal.getUsername();
 

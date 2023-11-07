@@ -48,7 +48,7 @@ public class FileService {
                             File file = new File(loader.getResource(location).getFile());
                             s3client.putObject(bucketName, location, file);
                         }
-                ).flatMap(fileEntity1 -> eventService.addEvent(fileEntity, userEntity, EventString.UPLOADED))
+                ).flatMap(fileEntity1 -> eventService.addEvent(fileEntity1, userEntity, EventString.UPLOADED))
                 .doOnSuccess(v -> {
                     log.info("File {} has been uploaded by {} !", fileEntity, userEntity.getUsername());
                 });

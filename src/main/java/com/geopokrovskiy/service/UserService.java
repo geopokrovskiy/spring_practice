@@ -1,8 +1,10 @@
 package com.geopokrovskiy.service;
 
+import com.geopokrovskiy.entity.EventEntity;
 import com.geopokrovskiy.entity.Status;
 import com.geopokrovskiy.entity.UserEntity;
 import com.geopokrovskiy.entity.UserRole;
+import com.geopokrovskiy.repository.EventRepository;
 import com.geopokrovskiy.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,12 +14,14 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final EventRepository eventRepository;
     private final PasswordEncoder passwordEncoder;
 
     public Mono<UserEntity> registerUser(UserEntity user) {
@@ -66,16 +70,37 @@ public class UserService {
     }
 
     public Mono<UserEntity> getUserById(Integer id) {
-        return userRepository.findById(id);
+        return Mono.zip(userRepository.findById(id), eventRepository.findAllByUserId(id).collectList())
+                .map(tuples -> {
+                    UserEntity result = tuples.getT1();
+                    List<EventEntity> events = tuples.getT2();
+                    result.setEvents(events);
+                    return result;
+                });
     }
 
     public Mono<UserEntity> getUserByUsername(String username) {
-        return userRepository.findByUsername(username);
+        return userRepository.findByUsername(username).flatMap(user -> Mono.zip(
+                Mono.just(user),
+                eventRepository.findAllByUserId(user.getId()).collectList())
+                .map(tuples -> {
+                    UserEntity result = tuples.getT1();
+                    List<EventEntity> events = tuples.getT2();
+                    result.setEvents(events);
+                    return result;
+                }));
     }
 
     public Flux<UserEntity> getAllUsers() {
-        log.info("All users has been received by an admin!");
-        return userRepository.findAll();
+        return userRepository.findAll()
+                .flatMap(user -> Mono.zip(Mono.just(user), eventRepository.findAllByUserId(user.getId()).collectList()))
+                .map(tuples -> {
+                    UserEntity result = tuples.getT1();
+                    List<EventEntity> events = tuples.getT2();
+                    result.setEvents(events);
+                    log.info("All users has been received by an admin!");
+                    return result;
+                });
     }
 
     public Mono<UserEntity> deleteUser(UserEntity user) {
